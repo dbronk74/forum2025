@@ -1,16 +1,24 @@
 import { Link } from 'react-router-dom'
-import threads from '@/data/threads.json'
+import raw from '@/data/threads.json'
 
-type ThreadMeta = {
+type ThreadJson = {
   id: string
   title: string
   author: string
   replies: number
-  updated: string
+  updated?: string
+  lastUpdate?: string
 }
 
 export default function Forum() {
-  const list = threads as ThreadMeta[]
+  // Normalize the JSON to a consistent shape (support both `updated` and `lastUpdate`)
+  const list = (raw as ThreadJson[]).map((t) => ({
+    id: t.id,
+    title: t.title,
+    author: t.author,
+    replies: t.replies,
+    updated: t.updated ?? t.lastUpdate ?? '',
+  }))
 
   return (
     <section className="space-y-6">
