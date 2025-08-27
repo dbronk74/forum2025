@@ -11,7 +11,7 @@ type ThreadJson = {
 }
 
 export default function Forum() {
-  // Normalize the JSON to a consistent shape (support both `updated` and `lastUpdate`)
+  // Normalize to a consistent shape (support both `updated` and `lastUpdate`)
   const list = (raw as ThreadJson[]).map((t) => ({
     id: t.id,
     title: t.title,
