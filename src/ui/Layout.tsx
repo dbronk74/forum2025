@@ -1,19 +1,17 @@
-import { ReactNode } from 'react'
-import BranchHeader from '@/ui/BranchHeader'
+import { Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
-import ErrorBoundary from '@/ui/ErrorBoundary'
+import BranchHeader from '@/ui/BranchHeader'
+import Spinner from '@/ui/Spinner'
 
-type Props = { children?: ReactNode }
-
-export default function Layout({ children }: Props) {
+export default function Layout() {
   return (
-    <div className="min-h-dvh">
+    <div className="cinematic">
       <BranchHeader />
-      <ErrorBoundary>
-        <main className="container-page py-6">
-          {children ?? <Outlet />}
-        </main>
-      </ErrorBoundary>
+      <main className="max-w-6xl mx-auto p-6">
+        <Suspense fallback={<Spinner />}>
+          <Outlet />
+        </Suspense>
+      </main>
     </div>
   )
 }
