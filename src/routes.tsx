@@ -8,6 +8,7 @@ const WorldSpeakArena = lazy(() => import('@/pages/WorldSpeakArena'))
 const Oracle = lazy(() => import('@/pages/Oracle'))
 const Vault = lazy(() => import('@/pages/Vault'))
 const Forum = lazy(() => import('@/pages/Forum'))
+const Thread = lazy(() => import('@/pages/Thread'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
 
 export const router = createBrowserRouter([
@@ -17,6 +18,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: 'forum', element: <Forum /> },
+      { path: 'forum/:id', element: <Thread /> },
       { path: 'gauntlet', element: <Gauntlet /> },
       { path: 'arena', element: <WorldSpeakArena /> },
       { path: 'oracle', element: <Oracle /> },

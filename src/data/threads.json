@@ -1,0 +1,23 @@
+[
+  {
+    "id": "t1",
+    "title": "Is AI good for democracy?",
+    "author": "Ava",
+    "replies": 12,
+    "lastUpdate": "2025-08-20"
+  },
+  {
+    "id": "t2",
+    "title": "Should crypto be legal tender?",
+    "author": "Max",
+    "replies": 31,
+    "lastUpdate": "2025-08-18"
+  },
+  {
+    "id": "t3",
+    "title": "Universal Basic Income: pros & cons",
+    "author": "Rin",
+    "replies": 8,
+    "lastUpdate": "2025-08-15"
+  }
+]
