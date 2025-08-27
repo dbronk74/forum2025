@@ -26,7 +26,6 @@ export default function BranchHeader() {
           <span className="text-emerald-400">2025</span>
         </button>
 
-        {/* Desktop */}
         <nav className="hidden md:flex gap-2">
           {tabs.map((t) => (
             <NavLink
@@ -47,7 +46,6 @@ export default function BranchHeader() {
           ))}
         </nav>
 
-        {/* Mobile */}
         <details className="md:hidden">
           <summary className={`${base} bg-slate-900/50 border-slate-800 cursor-pointer`}>
             Menu
