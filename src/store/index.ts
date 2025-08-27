@@ -1,4 +1,4 @@
-import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { configureStore, createSlice, PayloadAction, combineReducers } from '@reduxjs/toolkit'
 import duel from './duelSlice'
 import prestige from './prestigeSlice'
 import spectator from './spectatorSlice'
@@ -7,7 +7,9 @@ import oracle from './oracleSlice'
 import vault from './vaultSlice'
 import { loadState, saveState, throttle } from './persist'
 
-interface AppState { branch: string }
+interface AppState {
+  branch: string
+}
 const initialState: AppState = { branch: 'forum' }
 
 const appSlice = createSlice({
@@ -22,30 +24,34 @@ const appSlice = createSlice({
 
 export const { setBranch } = appSlice.actions
 
-// --- hydrate from localStorage (safe if empty)
-const PERSIST_KEY = 'forum2025'
-const preloaded = loadState<any>(PERSIST_KEY)
+// ---- explicit root reducer to avoid TS union inference issues
+const rootReducer = combineReducers({
+  app: appSlice.reducer,
+  duel,
+  prestige,
+  spectator,
+  arena,
+  oracle,
+  vault,
+})
 
-// Build store with (optional) preloaded state
+export type RootState = ReturnType<typeof rootReducer>
+export type AppDispatch = typeof store.dispatch
+
+// --- hydrate from localStorage (safe on SSR)
+const PERSIST_KEY = 'forum2025'
+const preloaded = typeof window !== 'undefined' ? loadState<any>(PERSIST_KEY) : undefined
+
 export const store = configureStore({
-  reducer: {
-    app: appSlice.reducer,
-    duel,
-    prestige,
-    spectator,
-    arena,
-    oracle,
-    vault,
-  },
-  preloadedState: preloaded,
+  reducer: rootReducer,
+  preloadedState: preloaded, // may be a partial; that’s fine
   devTools: true,
 })
 
 // --- persist selected slices (throttled)
 const selectPersist = () => {
-  const s = store.getState()
+  const s = store.getState() as RootState
   return {
-    // keep it lean but useful; add/remove as you like
     duel: s.duel,
     prestige: s.prestige,
     spectator: s.spectator,
@@ -60,6 +66,3 @@ store.subscribe(
     saveState(PERSIST_KEY, selectPersist())
   }, 800)
 )
-
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
