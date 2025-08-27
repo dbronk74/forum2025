@@ -1,33 +1,67 @@
 import { NavLink } from 'react-router-dom'
-import { useState } from 'react'
 
-const linkBase = "px-3 py-2 rounded-xl hover:bg-slate-800/60 transition"
-const navClass = ({ isActive }: { isActive: boolean }) =>
-  isActive ? `${linkBase} bg-slate-800` : `${linkBase} bg-slate-900/40`
+const tabs = [
+  { to: '/', label: 'Home' },
+  { to: '/forum', label: 'Forum' },
+  { to: '/gauntlet', label: 'Gauntlet' },
+  { to: '/arena', label: 'WorldSpeak' },
+  { to: '/oracle', label: 'Oracle' },
+  { to: '/vault', label: 'Vault' },
+]
 
 export default function BranchHeader() {
-  const [open, setOpen] = useState(false)
-  const links = (
-    <nav className="flex flex-col md:flex-row gap-2 text-sm">
-      <NavLink to="/" className={navClass}>Home</NavLink>
-      <NavLink to="/forum" className={navClass}>Forum</NavLink>
-      <NavLink to="/gauntlet" className={navClass}>Gauntlet</NavLink>
-      <NavLink to="/arena" className={navClass}>WorldSpeak</NavLink>
-      <NavLink to="/oracle" className={navClass}>Oracle</NavLink>
-      <NavLink to="/vault" className={navClass}>Vault</NavLink>
-    </nav>
-  )
-
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-800/60 bg-slate-950/70 backdrop-blur">
-      <div className="max-w-6xl mx-auto p-3 flex items-center gap-3">
-        <button className="md:hidden px-2 py-1 rounded-lg bg-slate-800" onClick={()=>setOpen(v=>!v)} aria-label="Toggle menu">☰</button>
-        <div className="text-lg font-semibold tracking-wide">
-          The Forum <span className="text-emerald-400">2025</span>
+    <header className="border-b border-slate-800/70 bg-slate-950/60 backdrop-blur">
+      <div className="container-page py-3 flex items-center justify-between">
+        <div className="font-semibold tracking-tight">
+          <span className="text-slate-200">The Forum</span>{' '}
+          <span className="text-emerald-400">2025</span>
         </div>
-        <div className="ml-auto hidden md:block">{links}</div>
+
+        <nav className="hidden md:flex gap-2">
+          {tabs.map((t) => (
+            <NavLink
+              key={t.to}
+              to={t.to}
+              className={({ isActive }) =>
+                [
+                  'px-3 py-1 rounded-lg text-sm border',
+                  isActive
+                    ? 'bg-slate-800 border-slate-600 text-slate-100'
+                    : 'bg-slate-900/50 border-slate-800 text-slate-300 hover:bg-slate-800/70',
+                ].join(' ')
+              }
+            >
+              {t.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* simple mobile toggle (can swap for a drawer later) */}
+        <details className="md:hidden">
+          <summary className="px-3 py-1 rounded-lg border bg-slate-900/50 border-slate-800 cursor-pointer">
+            Menu
+          </summary>
+          <div className="mt-2 flex flex-col gap-2">
+            {tabs.map((t) => (
+              <NavLink
+                key={t.to}
+                to={t.to}
+                className={({ isActive }) =>
+                  [
+                    'px-3 py-2 rounded-lg text-sm border',
+                    isActive
+                      ? 'bg-slate-800 border-slate-600 text-slate-100'
+                      : 'bg-slate-900/50 border-slate-800 text-slate-300 hover:bg-slate-800/70',
+                  ].join(' ')
+                }
+              >
+                {t.label}
+              </NavLink>
+            ))}
+          </div>
+        </details>
       </div>
-      {open && <div className="md:hidden border-t border-slate-800/60 px-3 pb-3">{links}</div>}
     </header>
   )
 }

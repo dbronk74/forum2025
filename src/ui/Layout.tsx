@@ -1,16 +1,21 @@
-import { Suspense } from 'react'
-import { Outlet } from 'react-router-dom'
+import { ReactNode } from 'react'
 import BranchHeader from '@/ui/BranchHeader'
-import Spinner from '@/ui/Spinner'
+import { Outlet } from 'react-router-dom'
 
-export default function Layout() {
+type Props = { children?: ReactNode }
+
+/**
+ * Unified app shell:
+ * - Global header
+ * - Page container with comfortable spacing
+ * - Works with either <Outlet/> (router) or children
+ */
+export default function Layout({ children }: Props) {
   return (
-    <div className="cinematic">
+    <div className="min-h-dvh">
       <BranchHeader />
-      <main className="max-w-6xl mx-auto p-6">
-        <Suspense fallback={<Spinner />}>
-          <Outlet />
-        </Suspense>
+      <main className="container-page py-6">
+        {children ?? <Outlet />}
       </main>
     </div>
   )
