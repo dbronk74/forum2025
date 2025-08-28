@@ -1,33 +1,53 @@
-import { NavLink } from 'react-router-dom'
-import { useState } from 'react'
+import * as React from "react";
+import { Link, useLocation } from "react-router-dom";
 
-const linkBase = "px-3 py-2 rounded-xl hover:bg-slate-800/60 transition"
-const navClass = ({ isActive }: { isActive: boolean }) =>
-  isActive ? `${linkBase} bg-slate-800` : `${linkBase} bg-slate-900/40`
+function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(" ");
+}
+
+const tabs = [
+  { to: "/", label: "Home" },
+  { to: "/forum", label: "Forum" },
+  { to: "/gauntlet", label: "Gauntlet" },
+  { to: "/arena", label: "WorldSpeak" },
+  { to: "/oracle", label: "Oracle" },
+  { to: "/vault", label: "Vault" },
+];
 
 export default function BranchHeader() {
-  const [open, setOpen] = useState(false)
-  const links = (
-    <nav className="flex flex-col md:flex-row gap-2 text-sm">
-      <NavLink to="/" className={navClass}>Home</NavLink>
-      <NavLink to="/forum" className={navClass}>Forum</NavLink>
-      <NavLink to="/gauntlet" className={navClass}>Gauntlet</NavLink>
-      <NavLink to="/arena" className={navClass}>WorldSpeak</NavLink>
-      <NavLink to="/oracle" className={navClass}>Oracle</NavLink>
-      <NavLink to="/vault" className={navClass}>Vault</NavLink>
-    </nav>
-  )
+  const { pathname } = useLocation();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-800/60 bg-slate-950/70 backdrop-blur">
-      <div className="max-w-6xl mx-auto p-3 flex items-center gap-3">
-        <button className="md:hidden px-2 py-1 rounded-lg bg-slate-800" onClick={()=>setOpen(v=>!v)} aria-label="Toggle menu">☰</button>
-        <div className="text-lg font-semibold tracking-wide">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/80 backdrop-blur supports-[backdrop-filter]:bg-slate-950/60">
+      <div className="page flex h-12 items-center justify-between">
+        <Link
+          to="/"
+          className="hover-glow rounded-lg px-1.5 py-0.5 text-[15px] font-semibold tracking-tight text-slate-200 focus-ring"
+        >
           The Forum <span className="text-emerald-400">2025</span>
-        </div>
-        <div className="ml-auto hidden md:block">{links}</div>
+        </Link>
+
+        <nav className="flex items-center gap-1">
+          {tabs.map((t) => {
+            const active = pathname === t.to;
+            return (
+              <Link
+                key={t.to}
+                to={t.to}
+                aria-current={active ? "page" : undefined}
+                className={cx(
+                  "rounded-lg px-2.5 py-1 text-[13px] font-medium focus-ring transition",
+                  active
+                    ? "bg-emerald-600/90 text-white shadow-sm"
+                    : "text-slate-300 hover:bg-white/5 active:bg-white/10"
+                )}
+              >
+                {t.label}
+              </Link>
+            );
+          })}
+        </nav>
       </div>
-      {open && <div className="md:hidden border-t border-slate-800/60 px-3 pb-3">{links}</div>}
     </header>
-  )
+  );
 }
